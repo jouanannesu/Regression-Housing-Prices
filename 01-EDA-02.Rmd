@@ -226,9 +226,19 @@ Fit 5 Add another continuous variable.
 Fit 6 Return to fit1 but add an additional categorical variable. 
 
 ```{r}
-fit6 <- lm(SalePrice ~ TotalBsmtSF + MSZoning, data = data_sub)
+fit6 <- lm(SalePrice ~ TotalBsmtSF + factor(MSZoning), data = data_sub)
 summary(fit6)
 ```
+
+Y = X B + error
+B = [\beta_0, .... \beta_5]^T 
+X = 
+
+```{r}
+fit6_2 <- lm(SalePrice ~ -1 + TotalBsmtSF + factor(MSZoning), data = data_sub)
+summary(fit6_2)
+```
+
 
 First notice that MSZoning has 5 levels 
 ```{r}
@@ -236,14 +246,14 @@ First notice that MSZoning has 5 levels
 # str(data_sub$MSZoning) #chr
 # Convert to the right data type 
 data_sub$MSZoning <- factor(data_sub$MSZoning) # base R 
-levels(data_sub$MSZoning)
+levels(data_sub$MSZoning) 
 ```
 
 ```{r}
 unique(data_sub$MSZoning)
 ```
 
-Not quite sure why the default reference group is named C (all). 
+Not quite sure why the default reference group is named C (all). Because R picks it. 
 
 ```{r}
 levels(data_sub$MSZoning)
@@ -251,12 +261,12 @@ levels(data_sub$MSZoning)
 
 The model is given as 
 $$
-\mu(SalePrice | TotalBsmtSF, MSZoning) = \beta_0 + \beta_1 TotalBsmtSF + \beta_2MSZoningFV + 
+\mu(SalePrice | TotalBsmtSF, MSZoning) = \beta_0 + \beta_1 TotalBsmtSF  + \beta_2 MSZoningFV + 
 $$
 $$
-\beta_3MSZoningRH + \beta_4MSZoningRL + \beta_5MSZoningRM, 
+\beta_3 MSZoningRH + \beta_4 MSZoningRL + \beta_5 MSZoningRM, 
 $$
-where MSZoningFV, MSZoningFV, MSZoningRL, and MSZoningRM are all indivator variables, i.e., for MSZoningFV, then MSZoningFV = 1 if MSZoning = FV, MSZoningFV = 0 otherwise. 
+where MSZoningFV, MSZoningRH, MSZoningRL, and MSZoningRM are all indicator variables, i.e., for MSZoningFV, then MSZoningFV = 1 if MSZoning = FV, MSZoningFV = 0 otherwise. 
 
 $$
 MSZoningFV = 1 \ \ \text{if} \ \ \text{MSZoning = FV}
@@ -272,7 +282,7 @@ $$
 
 For MSZoning = FV, the regression line is given as 
 $$
-\mu(SalePrice | TotalBsmtSF, MSZoning = FV) = \beta_0 + \beta_1 TotalBsmtSF + \beta_2MSZoningFV 
+\mu(SalePrice | TotalBsmtSF, MSZoning = FV) = \beta_0 + \beta_1 TotalBsmtSF + \beta_2 MSZoningFV + ....
 $$
 $$
 = (\beta_0 + \beta_2) + \beta_1 TotalBsmtSF
@@ -280,7 +290,7 @@ $$
 
 For MSZoning = RH, the regression line is given as 
 $$
-\mu(SalePrice | TotalBsmtSF, MSZoning = RH) = \beta_0 + \beta_1 TotalBsmtSF + \beta_3MSZoningRH
+\mu(SalePrice | TotalBsmtSF, MSZoning = RH) = \beta_0 + \beta_1 TotalBsmtSF + \beta_3MSZoningRH + ...
 $$
 $$
 = (\beta_0 + \beta_3) + \beta_1 TotalBsmtSF
@@ -297,9 +307,9 @@ etc.
 
 If we were to plot these regression lines altogether, they'll be parallel to one another. They only differ by intercepts. Since the effects are additive, this model is called additive model. 
 
-Another thing to note is that 
+It is important to know that  
 
-- $\beta_2$ is the estimated mean response switching from MSZoningFV to the reference group while keeping all else constant, 
+- $\beta_2$ is the estimated mean response (difference) switching from MSZoningFV to the reference group while keeping all else constant, 
 
 - $\beta_3$ is the estimated mean response switching from MSZoningFV to the reference group while keeping all else constant, 
 
@@ -310,11 +320,11 @@ Another thing to note is that
 Depends on our research of interest, sometimes we may want to use the relevel() function either to re-level/re-order the group or set a different reference group. When we do, we may end up with a different "re-parametrized" model, which is still a valid model so long as we keep the number of coefficients $\beta$s is right. 
 
 Again back to the model that fits the intercept, TotalBsmtSF and MSZoning, we know that for any model to be a valid model we need a total of 6 $\beta$s. This is because 
-1 (intercept) + 1 (TotalBsmtSF: continuous) + 4 (MSZoning has 5 levels but 1 of them is the reference group).
+1 (intercept) + 1 (TotalBsmtSF: continuous) + 4 (MSZoning has 5 levels but 1 of them is the reference group). 
 
 Is fit6 a valid model? 
 
-Fit 7 fit a re-parametrized model of fit6 while setting MSZoning = FV as the refernece group. 
+Fit 7 fit a re-parametrized model of fit6 while setting MSZoning = FV as the reference group. 
 
 ```{r}
 unique(data_sub$MSZoning)
