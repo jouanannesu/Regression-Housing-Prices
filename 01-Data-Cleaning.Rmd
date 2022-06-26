@@ -1,0 +1,31 @@
+---
+title: "01-Data-Cleaning"
+output: pdf_document
+---
+
+# Load packages 
+
+```{r}
+library(tidyverse) # data manipulation 
+library(ggplot2)   # plotting
+```
+
+# Load data 
+
+```{r}
+data <- read.csv("train.csv")
+```
+
+# View data
+
+```{r}
+data %>% glimpse 
+```
+
+## Check missing data 
+
+
+
+
+
+

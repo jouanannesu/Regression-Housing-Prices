@@ -230,10 +230,6 @@ fit6 <- lm(SalePrice ~ TotalBsmtSF + factor(MSZoning), data = data_sub)
 summary(fit6)
 ```
 
-Y = X B + error
-B = [\beta_0, .... \beta_5]^T 
-X = 
-
 ```{r}
 fit6_2 <- lm(SalePrice ~ -1 + TotalBsmtSF + factor(MSZoning), data = data_sub)
 summary(fit6_2)
@@ -312,15 +308,13 @@ It is important to know that
 - $\beta_2$ is the estimated mean response (difference) switching from MSZoningFV to the reference group while keeping all else constant, 
 
 - $\beta_3$ is the estimated mean response switching from MSZoningFV to the reference group while keeping all else constant, 
-
 - $\beta_4$ is... MSZoningRH to the reference group while..., 
 
 - $\beta_5$ is... MSZoningRL to the reference group while...
 
 Depends on our research of interest, sometimes we may want to use the relevel() function either to re-level/re-order the group or set a different reference group. When we do, we may end up with a different "re-parametrized" model, which is still a valid model so long as we keep the number of coefficients $\beta$s is right. 
 
-Again back to the model that fits the intercept, TotalBsmtSF and MSZoning, we know that for any model to be a valid model we need a total of 6 $\beta$s. This is because 
-1 (intercept) + 1 (TotalBsmtSF: continuous) + 4 (MSZoning has 5 levels but 1 of them is the reference group). 
+Again back to the model that fits the intercept, TotalBsmtSF and MSZoning, we know that for any model to be a valid model we need a total of 6 $\beta$s. This is because 1 (intercept) + 1 (TotalBsmtSF: continuous) + 4 (MSZoning has 5 levels but 1 of them is the reference group). 
 
 Is fit6 a valid model? 
 
@@ -333,7 +327,6 @@ unique(data_sub$MSZoning)
 ```{r}
 data_sub$MSZoning <- relevel(data_sub$MSZoning, ref = "FV")
 ```
-
 
 This didn't work because we didn't save it. Now it does. Now FV is the reference group. 
 ```{r}
@@ -350,7 +343,6 @@ summary(fit7)
 ```
 
 Is fit7 a valid model? 
-
 
 Referring back to the plot of SalePrice vs MSZoning, sometimes it is better to fit an ANOVA model instead especially if the trend is not clear. The advantage of ANOVA model is that it let us to test the overall effect of MSZoning on SalePrice. 
 
@@ -370,5 +362,4 @@ summary(fit8)
 
 The p-val associated with TotalBsmtSF:LotArea (Pr(>|t|) = 4.54e-05) is significant, whcih means that there is a significant interactive effect between TotalBsmtSF and LotArea. That is, the effect of TotalBsmtSF on the response variable (SalePrice) depends on/interacts with LotArea, and vice versa. 
 
-None of the model we fit so far is a good fit. But it is important to start with simple cases. 
-
+None of the model we fit so far is a good fit, but it is a start. 

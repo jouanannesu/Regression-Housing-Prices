@@ -43,6 +43,7 @@ model_0 <- lm( formula = SalePrice ~ YearBuilt, data = train_data)
 # print summary statistics
 summary(model_0)
 ```
+
 $$
 \mu(Y|X) = \beta_0 + \beta_1 X
 $$
