@@ -45,6 +45,11 @@ summary(fit2)
 fit8 extends fit2 to include an interaction term. fit8 is referred to as the non-additive model. It is also known as different-slopes model. 
 
 ```{r}
+fit8_2 <- lm(SalePrice ~ TotalBsmtSF * LotArea, data = data)
+summary(fit8_2)
+```
+
+```{r}
 fit8 <- lm(SalePrice ~ TotalBsmtSF + LotArea + TotalBsmtSF:LotArea, data = data)
 summary(fit8)
 ```
@@ -61,6 +66,7 @@ Recall that fit7 fits a continuous variable and a categorical variable. Can you 
 Notice that in **01-EDA-02.Rmd** we briefly cleaned the data and rename the data set as data_sub already. We need to do additional cleaning later but let's ignore it for now. 
 
 ```{r}
+#Piping - manipulates and displays data but does not actually change and save data
 data$MSZoning %>% str()
 ```
 
@@ -90,6 +96,32 @@ fit9 <- lm(SalePrice ~ TotalBsmtSF + MSZoning + TotalBsmtSF:MSZoning, data = dat
 summary(fit9)
 ```
 
+The model is given as 
+$$
+\mu(SalePrice | TotalBsmtF, MSZoning) = \beta_0 + \beta_1 TotalBasmtSF + \beta_2 MSZoningFV + ... \\ 
+\beta_6 TotalBasmtSF \times MSZoningFV + \beta_7 TotalBasmtSF \times MSZoningRH + \beta_8 TotalBasmtSF \times MSZoningRL + \beta_9 TotalBasmetSF \times MSZoningRM 
+$$
+
+5 groups (5 regression lines if we were to plot it)
+
+1st group (reference group)
+
+$$
+\mu(...) = \beta_0 + \beta_1 TotalBasmtSF + 0 
+$$
+
+2nd group (MSZoningFV = 1, the rest of the indicator variables = 0)
+
+$$
+\mu(...) = \beta_0 + \beta_1 TotalBasmtSF + \beta_2 * 1 + \beta_6 * TotalbasmSF \\
+= (\beta_0 + \beta_2) + (\beta_1 + \beta_6) TotalbasmSF 
+$$
+
+3rd group (MSZoningRH = 1, the rest of the indicator variables = 0)
+
+$$
+... = (\beta_0 + \beta_3) + (\beta_1 + \beta7)TotalbasSF
+$$
 
 # 4. Fit a MLR with 3-way interaction term and 2-way interaction terms 
 
@@ -106,5 +138,8 @@ summary(fit10)
 
 Here we only have 3 predictor variables. Now imagine if we fit a model with 81 predictor variables... 
 
-
-
+0. Model diagnostics 
+1. Model comparison (compare two models) 
+2. Model selection (select from a lot of models) 
+3. Feature selection (Continue to do EDA, apply PCA, random forest, etc) 
+4. Prediction 
